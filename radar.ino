@@ -1,13 +1,16 @@
 #include<Servo.h>
-#define trig D1 //d6
-#define echo D2 //d5
+#define trig D1 //d1
+#define echo D2 //d2
 #define buzz D7
+#define srv D4
+int dt=10;   //delay_time
 Servo servo;
+
 #define SOUND_VELOCITY 0.034
-//#define CM_TO_INCH 0.393701
+#define CM_TO_INCH 0.393701
 long duration;
 float distanceCm;
-//float distanceInch;
+float distanceInch;
 
 
 //int distance,duration;
@@ -18,7 +21,7 @@ void setup()
   pinMode(echo,INPUT);
   pinMode(buzz,OUTPUT);
   Serial.begin(9600);
-  servo.attach(2); //d7
+  servo.attach(srv); //d4
 }
   
 void loop() 
@@ -30,21 +33,22 @@ void loop()
     
     {
       servo.write(i);
-      //delay(1);
+      
       calc_dis();
     }
     delay(1000);
     for (int i=180;i>=0;i-=5)
     {
       servo.write(i);
-      //delay(1);
+      
       calc_dis();
     
     }
     delay(1000);
   }
   else{
-    digitalWrite(buzz,HIGH);}
+    digitalWrite(buzz,HIGH);
+  }
 }
 //This code is written to calculate the DISTANCE using ULTRASONIC SENSOR
 
@@ -58,7 +62,6 @@ int calc_dis()
   digitalWrite(trig, HIGH);
   delayMicroseconds(10);
   digitalWrite(trig, LOW);
-  //digitalWrite(buzz,LOW);
   
   // Reads the echo, returns the sound wave travel time in microseconds
   duration = pulseIn(echo, HIGH);
@@ -71,9 +74,6 @@ int calc_dis()
   
   // Prints the distance on the Serial Monitor
   Serial.print("Distance (cm): ");
- // if(distanceCm<10){
-   //   digitalWrite(buzz,HIGH);
-    //}
   Serial.println(distanceCm);
   Serial.print("Distance (inch): ");
   Serial.println(distanceInch);    
